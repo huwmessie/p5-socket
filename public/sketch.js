@@ -4,6 +4,7 @@
 
 //create a socket connection
 var socket;
+var c;
 
 function setup() {
     //create a canvas
@@ -24,6 +25,8 @@ function setup() {
     socket.on('action', onAction);
 
     socket.open();
+
+    c = color(random(255));
 }
 
 //this function is called continuously
@@ -37,14 +40,16 @@ function mousePressed() {
 
         console.log("Mouse pressed at " + mouseX + " " + mouseY);
         //send 
-        socket.emit('clientAction', { x: mouseX, y: mouseY });
+        socket.emit('clientAction', { x: mouseX, y: mouseY , c: c.toString('#rrggbb')});
     }
 }
 
+
 //called by the server upon any user action including me
-function onAction(obj) {
+function onAction(obj) { // on a click
     //change fill color to black
-    fill(0, 0, 0);
+    fill(obj.c);
+    noStroke();
     //draw a circle
     ellipse(obj.x, obj.y, 20, 20);
 }
